@@ -1,0 +1,81 @@
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    //width: 100%;
+    //height: 100%;
+}
+
+body,
+html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-size: 20pt;
+    font-family: sans-serif;
+}
+
+body {
+    background-color: white;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+body.drag-hover {
+    background-color: dodgerblue;
+}
+
+body.drag-hover .drop-msg {
+    visibility: visible;
+}
+
+.drop-msg {
+    visibility: hidden;
+    margin: 10% auto;
+    display: inline-block;
+    text-transform: uppercase;
+    padding: 20px 30px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 3px;
+    word-spacing: 1em;
+    pointer-events: none;
+}
+
+
+#visual {
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.9;
+}
+.bar {
+    display: inline-block;
+    width: 0px;
+    height: 0px;
+    border-radius: 50%;
+    
+    //background: dodgerblue;
+    //margin: 0px 20px;
+    //transition-property: width,height;
+    //transition-duration: 0.1s,0.1s;
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#progress {
+    position: absolute;
+    top: 0;
+    left: 0%;
+    height: 100%;
+    width: 0%;
+    background: dodgerblue;
+    transition: width 0.3s;
+}
