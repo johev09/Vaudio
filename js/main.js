@@ -63,7 +63,7 @@ function init() {
     //addCube();
     //addCircle(100);
 
-    var zInterval = 20,
+    var zInterval = 30,
         noc = 8;
 
     //addCylinder(100, 5, 0);
@@ -227,11 +227,14 @@ function mouse2ThreeCoord(x, y) {
 }
 
 function animate() {
+    if(isPlaying) {
+        updateCylinders();
+        //updatePointLight();
+        render();
+        controls.update();
+    }
+    
     requestAnimationFrame(animate);
-    updateCylinders();
-    //updatePointLight();
-    render();
-    controls.update();
 }
 
 function updatePointLight() {

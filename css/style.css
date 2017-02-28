@@ -70,12 +70,33 @@ body.drag-hover .drop-msg {
     transform: translate(-50%,-50%);
 }
 
+#bg,
+#drag-drop-msg,
 #progress {
     position: absolute;
     top: 0;
     left: 0%;
     height: 100%;
+    width: 100%;
+}
+
+#bg {
+    filter: blur(10px);
+    -webkit-filter: blur(10px);
+}
+
+#progress {
     width: 0%;
-    background: dodgerblue;
     transition: width 0.3s;
+}
+
+#drag-drop-msg {
+    display: flex;
+    color: gray;
+    align-items: center;
+    justify-content: center;
+}
+
+.green {
+    color: yellowgreen;
 }

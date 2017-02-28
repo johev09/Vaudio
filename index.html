@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Drag & Drop a mp3</title>
+    <title>Web Audio Equalizer</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/three.min.js"></script>
     <script src="js/OrbitControls.js"></script>
@@ -11,8 +11,11 @@
 </head>
 
 <body class="file-drag">
+    <div id="drag-drop-msg">
+        <span>Drag &amp; Drop any <span class="green">Audio</span> file...</span>
+    </div>
+    <div id="bg"></div>
     <div id="progress"></div>
-    <div class="drop-msg">drop the bass</div>
     <div id="visual">
         <div class="bar"></div>
         <div class="bar"></div>
