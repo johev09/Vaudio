@@ -38,25 +38,36 @@ function getImageURL(image) {
 }
 
 function ParseFile(file) {
+    
     new jsmediatags.Reader(file)
     .setTagsToRead(["title", "album", "picture"])//["title", "year", "album", "year", "genre", "picture"])
     .read({
-        onSuccess: function (tag) {
+        onSuccess: function (info) {
 //                console.log(tag);
 //            var dataurl = "img/default_album_art.png";
-            if (tag.tags.hasOwnProperty("picture")) {
-                dataurl = getImageURL(tag.tags.picture);
+            
+            if (info.tags.title) {
+                document.querySelector(".title")
+                .textContent = info.tags.title;
+            }
+            
+            if (info.tags.album) {
+                document.querySelector(".album")
+                .textContent = info.tags.album;
+            }
+            
+            if (info.tags.picture) {
+                dataurl = getImageURL(info.tags.picture);
                 
                 bgDiv.style.background = "url(" + dataurl + ")";
                 bgDiv.style.backgroundSize = "cover";
                 bgDiv.style.backgroundPosition = "center center";
 
                 progressDiv.style.background = "url(" + dataurl + ")";
-                progressDiv.style.backgroundSize = "conatin";
+                progressDiv.style.backgroundSize = "contain";
                 progressDiv.style.backgroundPosition = "center center";
                 progressDiv.style.backgroundRepeat = "no-repeat";
             }
-            
         },
         onError: function(err) {
             console.error(err);
@@ -73,6 +84,8 @@ function ParseFile(file) {
     console.log(context);
     if (isPlaying) source.stop();
     reader.onload = function () {
+        progressDiv.classList.add("loaded");
+        
         context.decodeAudioData(reader.result, function (buffer) {
             prepare(buffer);
         });

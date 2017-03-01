@@ -35,14 +35,21 @@ function init() {
 
     camera = new THREE.PerspectiveCamera(cameraAngle, window.innerWidth / window.innerHeight, camerNear, cameraFar);
 
-    //camera.position.x = -900;
-    //camera.position.y = 160;
-    camera.position.z = 500;
-    //camera.position.x = -500;
+//    camera.position.z = 500;
+    
+    camera.position.x = -497.0897588478286;
+    camera.position.y = -10.282720712119367;
+    camera.position.z = -52.877569000135736;
+    
+    camera.rotation.x = 2.747287683882044;
+    camera.rotation.y = -1.5172379147024933;
+    camera.rotation.z = 2.747796375502795;
 
     controls = new THREE.OrbitControls(camera);
-    controls.autoRotate = true;
-    //controls.addEventListener("change", render);
+//    controls.autoRotate = true;
+    controls.addEventListener("change", function(abc) {
+        console.log(camera);
+    });
 
     scene.add(camera);
 
