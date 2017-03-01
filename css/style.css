@@ -117,6 +117,8 @@ body.drag-hover .drop-msg {
 }
 
 .controls {
+    z-index: 999;
+/*    display: inline-block;*/
     display: none;
     position: absolute;
     top: 0px;
@@ -127,6 +129,18 @@ body.drag-hover .drop-msg {
     font-weight: bold;
     color: white;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+    
+    text-align: left;
+}
+.controls input {
+    margin: 0px;
+}
+.controls i {
+    color: black;
+    text-shadow: 1px 1px 1px rgb(255, 255, 255);
+}
+.controls .play-pause {
+    cursor: pointer;
 }
 .controls.loaded {
     display: inline-block;

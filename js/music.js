@@ -9,6 +9,27 @@ filedrag.addEventListener("dragover", fileDragHover, false);
 filedrag.addEventListener("dragleave", fileDragHover, false);
 filedrag.addEventListener("drop", fileSelectHandler, false);
 
+var controlsDiv = document.querySelector(".controls"),
+    autoRotateCheckbox = controlsDiv.querySelector(".auto-rotate-checkbox"),
+    playPause = controlsDiv.querySelector(".play-pause");
+console.log(controlsDiv);
+
+autoRotateCheckbox.onchange = function() {
+    controls.autoRotate = this.checked;
+}
+
+playPause.onclick = function() {
+    if (isPlaying) {
+        source.stop();
+        this.innerHTML = "<i class='fa fa-play'></i> Play";
+    }
+    else {
+        this.innerHTML = "<i class='fa fa-pause'></i> Pause";
+        source.start();
+    }
+    isPlaying = !isPlaying;
+}
+
 function fileDragHover(e) {
     e.stopPropagation();
     e.preventDefault();
@@ -84,7 +105,8 @@ function ParseFile(file) {
     console.log(context);
     if (isPlaying) source.stop();
     reader.onload = function () {
-        progressDiv.classList.add("loaded");
+//        progressDiv.classList.add("loaded");
+        controlsDiv.classList.add("loaded");
         
         context.decodeAudioData(reader.result, function (buffer) {
             prepare(buffer);
@@ -108,15 +130,17 @@ function prepare(buffer) {
     // Connect the output of the source to the input of the analyser
     source.connect(analyser);
     source.onended = function () {
-            isPlaying = false;
-        }
+        isPlaying = false;
+    }
         // Connect the output of the analyser to the destination
     analyser.connect(context.destination);
     console.log(analyser); // fftSize/2 = 32 data points
-    analyser.fftSize = 64;
+    analyser.fftSize = 128;
     frequencyData = new Uint8Array(analyser.frequencyBinCount);
     source.start();
     isPlaying = true;
+    
+    console.log(source);
     /*
     var filter = offlineContext.createBiquadFilter();
     filter.type = "lowpass";
@@ -128,21 +152,21 @@ function prepare(buffer) {
         process(e);
     };*/
 }
-var bars = document.querySelectorAll(".bar");
+//var bars = document.querySelectorAll(".bar");
 
 function update() {
-    if (isPlaying) {
-        // Get the new frequency data
-        analyser.getByteFrequencyData(frequencyData);
-        var k = 0;
-        //console.log(k);
-        for (var i = 0; i < bars.length; i++, k += 3) {
-            var size = frequencyData[k] / 255 * window.innerHeight * 0.8;
-            bars[i].style.width = size + 'px';
-            bars[i].style.height = size + 'px';
-            //console.log(frequencyData[i]);
-        }
-    }
+//    if (isPlaying) {
+//        // Get the new frequency data
+//        analyser.getByteFrequencyData(frequencyData);
+//        var k = 0;
+//        //console.log(k);
+//        for (var i = 0; i < bars.length; i++, k += 3) {
+//            var size = frequencyData[k] / 255 * window.innerHeight * 0.8;
+//            bars[i].style.width = size + 'px';
+//            bars[i].style.height = size + 'px';
+//            //console.log(frequencyData[i]);
+//        }
+//    }
     // Schedule the next update
     requestAnimationFrame(update);
 }
@@ -171,12 +195,13 @@ function ColorLuminance(hex, lum) {
     return rgb;
 }
 
-for (var i = 0; i < bars.length; i++) {
-    var lum = ((i / bars.length) * (maxLum - minLum)) + minLum;
+var noc = 11;
+for (var i = 0; i < noc; i++) {
+    var lum = ((i / noc) * (maxLum - minLum)) + minLum;
     var color = ColorLuminance(circleBaseColor, lum);
     //var color = randomColor();
     circleColors.push(color);
-    bars[i].style.background = color;
+//    bars[i].style.background = color;
 }
-bars[bars.length - 1].style.background = "#ffff50";
+//bars[bars.length - 1].style.background = "#ffff50";
 console.log(circleColors);

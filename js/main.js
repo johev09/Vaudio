@@ -70,8 +70,8 @@ function init() {
     //addCube();
     //addCircle(100);
 
-    var zInterval = 30,
-        noc = 8;
+    var zInterval = 30;
+//        noc = 9;
 
     //addCylinder(100, 5, 0);
     for (var i = 1; i <= noc; i++) {
