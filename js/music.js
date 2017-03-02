@@ -20,14 +20,12 @@ autoRotateCheckbox.onchange = function() {
 
 playPause.onclick = function() {
     if (isPlaying) {
-        source.stop();
-        this.innerHTML = "<i class='fa fa-play'></i> Play";
+        pause();
+        
     }
     else {
-        this.innerHTML = "<i class='fa fa-pause'></i> Pause";
-        source.start();
+        play();
     }
-    isPlaying = !isPlaying;
 }
 
 function fileDragHover(e) {
@@ -122,25 +120,30 @@ function ParseFile(file) {
     reader.readAsArrayBuffer(file);
 }
 
+var sourceBuffer,
+    startedAt=0,
+    pausedAt=0;
 function prepare(buffer) {
-    //var offlineContext = new OfflineAudioContext(1, buffer.length, buffer.sampleRate);
-    source = context.createBufferSource();
-    source.buffer = buffer;
-    analyser = context.createAnalyser();
-    // Connect the output of the source to the input of the analyser
-    source.connect(analyser);
-    source.onended = function () {
-        isPlaying = false;
-    }
-        // Connect the output of the analyser to the destination
-    analyser.connect(context.destination);
-    console.log(analyser); // fftSize/2 = 32 data points
-    analyser.fftSize = 128;
-    frequencyData = new Uint8Array(analyser.frequencyBinCount);
-    source.start();
-    isPlaying = true;
+    sourceBuffer = buffer;
+    play();
     
-    console.log(source);
+//    source = context.createBufferSource();
+//    source.buffer = buffer;
+//    analyser = context.createAnalyser();
+//    // Connect the output of the source to the input of the analyser
+//    source.connect(analyser);
+//    source.onended = function () {
+//        isPlaying = false;
+//    }
+//        // Connect the output of the analyser to the destination
+//    analyser.connect(context.destination);
+//    console.log(analyser); // fftSize/2 = 32 data points
+//    analyser.fftSize = 128;
+//    frequencyData = new Uint8Array(analyser.frequencyBinCount);
+//    source.start();
+//    isPlaying = true;
+//    
+//    console.log(source);
     /*
     var filter = offlineContext.createBiquadFilter();
     filter.type = "lowpass";
@@ -152,6 +155,48 @@ function prepare(buffer) {
         process(e);
     };*/
 }
+
+var play = function() {
+    var offset = pausedAt;
+
+    sourceNode = context.createBufferSource();
+    sourceNode.buffer = sourceBuffer;
+    sourceNode.onended = stop.bind(this);
+    
+    analyser = context.createAnalyser();
+    analyser.fftSize = 128; // fftSize/2 = 32 data points
+    frequencyData = new Uint8Array(analyser.frequencyBinCount);
+    
+    sourceNode.connect(analyser);
+    analyser.connect(context.destination);
+    
+    sourceNode.start(0, offset);
+
+    startedAt = context.currentTime - offset;
+    pausedAt = 0;
+    isPlaying = true;
+    
+    playPause.innerHTML = "<i class='fa fa-pause'></i> Pause";
+};
+
+var pause = function() {
+    var elapsed = context.currentTime - startedAt;
+    stop();
+    pausedAt = elapsed;
+};
+
+var stop = function() {
+    if (sourceNode) {          
+        sourceNode.disconnect();
+        sourceNode.stop(0);
+        sourceNode = null;
+    }
+    pausedAt = 0;
+    startedAt = 0;
+    isPlaying = false;
+    
+    playPause.innerHTML = "<i class='fa fa-play'></i> Play";
+};
 //var bars = document.querySelectorAll(".bar");
 
 function update() {
